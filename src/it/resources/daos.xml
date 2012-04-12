@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:jpa="http://aries.apache.org/xmlns/jpa/v1.1.0">
+
+	<bean id="personDao" class="com.justcloud.test.model.PersonDaoImpl">
+		<jpa:context property="entityManager" unitname="person" />
+	</bean>
+
+	<bean id="derbyDataSource" class="org.apache.derby.jdbc.EmbeddedXADataSource">
+		<property name="databaseName" value="memory:personDB" />
+		<property name="createDatabase" value="create" />
+	</bean>
+	
+	<service ref="personDao" interface="com.justcloud.test.model.PersonDao" />
+
+	<service ref="derbyDataSource" interface="javax.sql.XADataSource">
+		<service-properties>
+			<entry key="osgi.jndi.service.name" value="jdbc/personTest" />
+		</service-properties>
+	</service>
+
+</blueprint>
